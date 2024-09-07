@@ -4,9 +4,16 @@
 	export let className = undefined;
 </script>
 
-<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" class={cx(className)}>
+<svg
+	width="16"
+	height="16"
+	viewBox="0 0 16 16"
+	fill="currentColor"
+	xmlns="http://www.w3.org/2000/svg"
+	class={cx(className)}
+>
 	<path
-		d="M10 18L8.84 16.849C4.72 12.7771 2 10.0916 2 6.79564C2 4.11008 3.936 2 6.4 2C7.792 2 9.128 2.70627 10 3.82234C10.872 2.70627 12.208 2 13.6 2C16.064 2 18 4.11008 18 6.79564C18 10.0916 15.28 12.7771 11.16 16.8578L10 18Z"
+		d="M8 13L7.13 12.2087C4.04 9.40926 2 7.56297 2 5.297C2 3.45068 3.452 2 5.3 2C6.344 2 7.346 2.48556 8 3.25286C8.654 2.48556 9.656 2 10.7 2C12.548 2 14 3.45068 14 5.297C14 7.56297 11.96 9.40926 8.87 12.2147L8 13Z"
 		stroke="white"
 	/>
 </svg>

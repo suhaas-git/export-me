@@ -7,7 +7,7 @@ export interface Inventory {
 		value: string;
 	}[];
 	gallery: {
-		type: string;
+		type: 'video' | 'image';
 		url: string;
 	}[];
 }

@@ -11,22 +11,26 @@
 
 	let inventory: Inventory[] = [];
 
+	let filterType = 'All';
+
 	async function fetchData() {
 		inventory = await getData();
 	}
 
-	$: filteredInventory = inventory.filter(
-		(e) =>
-			e.item.toLowerCase().includes(searchQuery.toLowerCase()) ||
-			e.itemDescription.toLowerCase().includes(searchQuery.toLowerCase())
-	);
+	$: filteredInventory = inventory
+		.filter((e) => filterType === 'All' || e.type === filterType)
+		.filter(
+			(e) =>
+				e.item.toLowerCase().includes(searchQuery.toLowerCase()) ||
+				e.itemDescription.toLowerCase().includes(searchQuery.toLowerCase())
+		);
 
 	$: fetchData();
 </script>
 
-<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-4 pb-4">
 	<div
-		class="sticky top-0 z-10 bg-white flex flex-col gap-4 pt-4 pb-4"
+		class="sticky top-0 z-[1000] bg-white flex flex-col gap-4 pt-4 pb-4"
 		style="box-shadow: rgb(0 0 0/16%) 0 0 6px"
 	>
 		<div class="px-4">
@@ -34,7 +38,8 @@
 		</div>
 
 		<Chips
-			options={['All', 'JCB', 'Excavator', 'Bulldozer', 'Crane', 'Forklift']}
+			bind:selectedValue={filterType}
+			options={['All', 'Wheel Loader', 'Excavator', 'Backhoe Loader', 'Truck Tractor']}
 			defaultValue="All"
 		/>
 	</div>

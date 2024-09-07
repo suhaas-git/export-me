@@ -1,11 +1,11 @@
 <script lang="ts">
-	import scaleElementOnClick from '@shared/actions/scaleElementOnClick';
 	import ArrowRight from '@shared/assets/icons/ArrowRight.svelte';
 	import Heart from '@shared/assets/icons/Heart.svelte';
 	import MediaDot from '@shared/ui/MediaDot.svelte';
 	import { cx } from '@shared/utils/cx';
 
 	import emblaCarouselSvelte, { type EmblaCarouselSvelteType } from 'embla-carousel-svelte';
+	import type { HTMLMediaAttributes, HTMLVideoAttributes } from 'svelte/elements';
 	import { fade } from 'svelte/transition';
 
 	export let heading = '';
@@ -21,6 +21,8 @@
 		type: 'image' | 'video';
 		url: string;
 	}[] = [];
+
+	export let videoProps: HTMLMediaAttributes<HTMLVideoElement> = {};
 
 	let loading = true;
 
@@ -60,7 +62,6 @@
 		}, 200);
 	}
 
-	$: currentToNextFour = medias.slice(currentIndex, currentIndex + 4);
 	$: mediasType = medias.map((media) => media.type);
 </script>
 
@@ -90,15 +91,13 @@
 	</div>
 
 	<div
-		class="flex overflow-hidden rounded-xl no-scrollbar"
+		class="wrapper flex relative overflow-hidden rounded-xl no-scrollbar"
 		use:emblaCarouselSvelte
 		on:emblaInit={onInit}
 	>
 		<div class="flex relative">
 			{#if loading}
-				<div class={'flex flex-col gap-2'}>
-					<div class="rounded-md aspect-[4/3] animate-pulse min-w-[100vw] w-full bg-gray-200" />
-				</div>
+				<div class="rounded-md aspect-[4/3] animate-pulse min-w-[100vw] bg-gray-200" />
 			{/if}
 
 			{#each medias as media}
@@ -108,19 +107,20 @@
 				>
 					{#if media.type === 'image'}
 						<img
-							src={media.url}
 							alt="Item"
-							class="w-full h-full object-cover"
+							src={media.url}
 							on:load={handleLoad}
+							class="w-full h-full object-cover"
 						/>
 					{:else if media.type === 'video'}
 						<!-- svelte-ignore a11y-media-has-caption -->
 						<video
 							src={media.url}
-							controls
 							class="w-full h-full object-cover"
-							alt="item"
-							on:load={handleLoad}
+							autoplay
+							controls={false}
+							loop
+							muted
 						/>
 					{/if}
 				</div>
@@ -131,18 +131,20 @@
 			{currentIndex}
 			totalMedias={medias.length}
 			medias={mediasType}
-			className="absolute bottom-24"
+			className="absolute bottom-4"
 		/>
-	</div>
 
-	<div class="absolute bottom-[8px] -translate-y-full right-0 p-2 bg-white rounded-tl-[30px] z-30">
-		<button class="flex items-center justify-center w-12 h-12 text-white bg-amber-650 rounded-full">
-			<ArrowRight />
-		</button>
+		<div class="absolute bottom-0 right-0 p-2 bg-white rounded-tl-[30px] z-30">
+			<button
+				class="flex items-center justify-center w-12 h-12 text-white bg-amber-650 rounded-full"
+			>
+				<ArrowRight />
+			</button>
+		</div>
 	</div>
 
 	<p
-		class="text-base text-neutral-750 pt-1 font-medium text-nowrap text-ellipsis overflow-hidden"
+		class="text-base text-neutral-750 mt-3 font-medium text-nowrap text-ellipsis overflow-hidden"
 		title={heading}
 	>
 		{heading}

@@ -14,17 +14,23 @@
 
 	export let options: string[] = [];
 
+	export let selectedValue;
+
 	const {
 		elements: { root, item },
-		helpers: { isChecked }
+		helpers: { isChecked },
+		states: { value }
 	} = createRadioGroup({
 		defaultValue
 	});
+
+	$: selectedValue = $value;
 </script>
 
 <div class={cx('flex gap-3 overflow-auto no-scrollbar chips', classNames.wrapper)} use:melt={$root}>
 	{#each options as option}
 		{@const isOptionSelected = $isChecked(option)}
+
 		<button
 			use:melt={$item(option)}
 			class={cx(
