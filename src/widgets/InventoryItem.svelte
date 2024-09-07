@@ -63,6 +63,8 @@
 	}
 
 	$: mediasType = medias.map((media) => media.type);
+
+	$: console.log(currentIndex);
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -128,10 +130,10 @@
 		</div>
 
 		<MediaDot
-			{currentIndex}
-			totalMedias={medias.length}
-			medias={mediasType}
-			className="absolute bottom-4"
+			className="absolute bottom-2 w-full"
+			length={medias.length}
+			current={currentIndex}
+			maxVisibleIndicators={5}
 		/>
 
 		<div class="absolute bottom-0 right-0 p-2 bg-white rounded-tl-[30px] z-30">
