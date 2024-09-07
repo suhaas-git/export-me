@@ -152,10 +152,14 @@
 		{heading}
 	</p>
 	<p class="text-sm text-neutral-750 font-normal">{subheading}</p>
-	{#each features as feature}
-		<span class="text-xs text-neutral-250">{feature.label}: </span>
-		<span class="text-xs text-neutral-750 mr-2">{feature.value}</span>
-	{/each}
+	<div class="grid grid-cols-2">
+		{#each features as feature}
+			<div>
+				<span class="text-xs text-neutral-250">{feature.label}: </span>
+				<span class="text-xs text-neutral-750 mr-2">{feature.value}</span>
+			</div>
+		{/each}
+	</div>
 </div>
 
 <style>

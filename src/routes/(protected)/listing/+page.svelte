@@ -28,7 +28,7 @@
 	$: fetchData();
 </script>
 
-<div class="flex flex-col gap-4 pb-4">
+<div class="flex flex-col gap-4 pb-[128px]">
 	<div
 		class="sticky top-0 z-[1000] bg-white flex flex-col gap-4 pt-4 pb-4"
 		style="box-shadow: rgb(0 0 0/16%) 0 0 6px"
@@ -44,7 +44,7 @@
 		/>
 	</div>
 
-	<div class="px-4 overflow-auto flex flex-col gap-4">
+	<div class="px-4 overflow-auto flex flex-col gap-6">
 		{#each filteredInventory as item}
 			<InventoryItem
 				subheading={item.itemDescription}
