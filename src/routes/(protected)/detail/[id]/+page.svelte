@@ -1,10 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { onMount } from 'svelte';
-
-	import sample from '@shared/assets/images/WhatsApp Image 2024-09-01 at 15.11.28.jpeg';
-	import type { Inventory } from '@shared/types/inventory';
-	import { getDataById } from '@entities/data';
+	import type { Gallery as TGallery, GeneralAppearance, Inventory } from '@shared/types/inventory';
 
 	import scaleElementOnClick from '@shared/actions/scaleElementOnClick';
 	import Divider from '@shared/ui/Divider.svelte';
@@ -12,61 +8,79 @@
 	import DetailTable from '@widgets/detail/DetailTable.svelte';
 	import ArrowDown from '@shared/assets/icons/ArrowDown.svelte';
 	import { cx } from '@shared/utils/cx';
-	import Dialog from '@shared/ui/Dialog.svelte';
+	import { getDataById, getGallery, getGeneralAppearence } from '@entities/data';
+	import Gallery from '@shared/ui/Gallery.svelte';
 
 	const id = $page.params.id;
 
 	let loading = false;
 	let itemData: Inventory | undefined;
+	let gallery: TGallery[] = [];
+	let details: {
+		generalAppearance: GeneralAppearance;
+	} = {};
 
-	let isOpen = false;
+	let isOpen = {
+		generalAppearance: false
+	};
 
 	async function handleGetData(id: string) {
 		loading = true;
 		itemData = await getDataById(id);
+		gallery = await getGallery(id);
+		details.generalAppearance = await getGeneralAppearence(id);
+
 		loading = false;
 	}
 
 	$: handleGetData(id);
 </script>
 
-<div class="bg-black w-full h-full">
-	<div class="h-[220px] sticky top-0 w-full z-10">
-		<img src={sample} alt="sample" class="h-full w-full object-cover" />
-	</div>
+<div class="w-full h-full pb-4">
+	<Gallery {gallery} className="shadow-md sticky top-0 w-full z-10" />
 
-	<div class="bg-white relative pt-6 px-6 transition-all duration-300">
+	<div class="relative pt-6 px-2 transition-all duration-300">
 		{#if itemData}
-			<p class="text-xl font-semibold mb-4">{itemData.item}</p>
+			<div class="rounded-xl bg-white p-4 shadow-sm">
+				<p class="text-sm font-semibold mb-2">{itemData.item}</p>
+				<p class="text-xs text-gray-400 font-normal mb-3">
+					{#each itemData.features as feature, i}
+						<span>{feature}{i !== itemData.features.length - 1 ? ',' : ''} </span>
+					{/each}
+				</p>
 
-			<p class="text-sm text-gray-400 font-normal mb-3">
-				{#each itemData.features as feature, i}
-					<span>{feature}{i !== itemData.features.length - 1 ? ',' : ''} </span>
-				{/each}
-			</p>
+				<button
+					use:scaleElementOnClick
+					class="bg-amber-650 text-white rounded-md p-3 w-full font-bold text-sm"
+				>
+					Request a Quote
+				</button>
+			</div>
 
-			<button
-				use:scaleElementOnClick
-				class="bg-amber-650 text-white rounded-md p-3 w-full font-bold text-base mb-5"
-			>
-				Request a Quote
-			</button>
+			<Divider className="my-4" />
 
-			<Divider className="mb-5" />
+			{#each DETAILS_TO_SHOW as detail}
+				<div
+					class="rounded-xl bg-white p-4 shadow-sm mb-4"
+					on:click={() => (isOpen[detail.key] = !isOpen[detail.key])}
+				>
+					<div class="flex justify-between items-center h-fit">
+						<p class="text-base font-medium text-neutral-750">
+							{detail.title}
+						</p>
+						<ArrowDown
+							className={cx(
+								isOpen[detail.key] ? '-rotate-180' : 'rotate-0',
+								'transition-transform text-neutral-900'
+							)}
+						/>
+					</div>
 
-			{#each DETAILS_TO_SHOW as details}
-				<div class="flex justify-between" on:click={() => (isOpen = !isOpen)}>
-					<p class="mb-5 text-xl font-medium text-neutral-750">
-						{details.title}
-					</p>
-					<ArrowDown className={cx(isOpen ? '-rotate-180' : 'rotate-0', 'transition-transform')} />
+					{#if isOpen[detail.key]}
+						<DetailTable itemData={details[detail.key]} />
+					{/if}
 				</div>
-				{#if isOpen}
-					<DetailTable {itemData} key={details.key} />
-				{/if}
 			{/each}
 		{/if}
 	</div>
 </div>
-
-<Dialog></Dialog>

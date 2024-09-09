@@ -3,10 +3,9 @@
 	import Search from '@widgets/Search.svelte';
 	import type { Gallery, Inventory } from '@shared/types/inventory';
 
-	import getData, { getGallery } from '@entities/data';
-
 	import Chips from '@shared/ui/Chips.svelte';
 	import { goto } from '$app/navigation';
+	import getData, { getGallery } from '@entities/data';
 
 	let searchQuery = '';
 
@@ -16,17 +15,14 @@
 
 	async function fetchData() {
 		const basicInfo = await getData();
+		const newInventory: any = [];
 
 		for (const item of basicInfo) {
 			const gallery = await getGallery(item.id);
-			inventory = [
-				...inventory,
-				{
-					...item,
-					gallery
-				}
-			];
+			newInventory.push({ ...item, gallery });
 		}
+
+		inventory = newInventory;
 	}
 
 	function handleOnClick(item: Inventory) {
@@ -60,7 +56,7 @@
 		/>
 	</div>
 
-	<div class="px-4 overflow-auto flex flex-col gap-6">
+	<div class="px-4 overflow-auto flex flex-col gap-6 pb-4">
 		{#each filteredInventory as item}
 			<InventoryItem
 				subheading={item.itemDescription}

@@ -4,14 +4,9 @@
 	export let className = '';
 </script>
 
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" class={cx(className)}>
-	<circle cx="12" cy="12" r="12" transform="matrix(0 -1 -1 0 24 24)" fill="currentColor" />
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" class={cx(className)}>
 	<path
-		d="M5 12.1251L12 19L19 12.1251"
-		stroke="white"
-		stroke-width="1.5"
-		stroke-linecap="round"
-		stroke-linejoin="round"
+		d="M8.00002 11C7.73523 10.9989 7.4817 10.8928 7.29502 10.705L2.29502 5.70502C2.1312 5.51372 2.04559 5.26765 2.05531 5.01597C2.06503 4.76429 2.16936 4.52555 2.34746 4.34746C2.52555 4.16936 2.76429 4.06503 3.01597 4.05531C3.26765 4.04559 3.51372 4.1312 3.70502 4.29502L8.00002 8.58502L12.295 4.29502C12.4863 4.1312 12.7324 4.04559 12.9841 4.05531C13.2358 4.06503 13.4745 4.16936 13.6526 4.34746C13.8307 4.52555 13.935 4.76429 13.9447 5.01597C13.9545 5.26765 13.8688 5.51372 13.705 5.70502L8.70502 10.705C8.51835 10.8928 8.26481 10.9989 8.00002 11Z"
+		fill="currentColor"
 	/>
-	<path d="M12 5L12 18.1255" stroke="white" stroke-width="1.5" stroke-linecap="round" />
 </svg>

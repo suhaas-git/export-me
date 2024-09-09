@@ -8,6 +8,7 @@ export interface Inventory {
 	createdAt: string;
 	meter: string;
 	manufacturer: string;
+	features: string[];
 }
 
 export interface GeneralAppearance {
@@ -20,5 +21,5 @@ export interface GeneralAppearance {
 
 export interface Gallery {
 	type: 'image' | 'video';
-	url: string;
+	src: string;
 }

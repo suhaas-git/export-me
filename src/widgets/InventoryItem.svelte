@@ -7,6 +7,7 @@
 	import emblaCarouselSvelte, { type EmblaCarouselSvelteType } from 'embla-carousel-svelte';
 	import type { HTMLMediaAttributes, HTMLVideoAttributes } from 'svelte/elements';
 	import { fade } from 'svelte/transition';
+	import type { Gallery } from '@shared/types/inventory';
 
 	export let heading = '';
 
@@ -17,10 +18,7 @@
 		value: string;
 	}[] = [];
 
-	export let medias: {
-		type: 'image' | 'video';
-		url: string;
-	}[] = [];
+	export let medias: Gallery[] = [];
 
 	export let videoProps: HTMLMediaAttributes<HTMLVideoElement> = {};
 
@@ -63,14 +61,15 @@
 	}
 
 	$: mediasType = medias.map((media) => media.type);
+	$: mediasOk = medias.filter((media) => media.src);
 
-	$: console.log(currentIndex);
+	$: console.log(mediasOk);
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
 	class={cx(
-		'relative overflow-hidden transition-colors rounded',
+		'relative transition-colors rounded-b-xl shadow-md',
 		isMouseDown ? 'bg-gray-100' : 'bg-white'
 	)}
 	style="flex: 0 0 100%"
@@ -81,7 +80,6 @@
 	on:mouseup={handleMouseUp}
 	on:click
 >
-	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div class="p-2 absolute top-0 right-0 z-30" on:click={() => (starred = !starred)}>
 		<div
 			class={cx(
@@ -94,16 +92,16 @@
 	</div>
 
 	<div
-		class="wrapper flex relative overflow-hidden rounded-xl no-scrollbar"
+		class="wrapper flex relative overflow-hidden rounded-t-xl no-scrollbar"
 		use:emblaCarouselSvelte
 		on:emblaInit={onInit}
 	>
 		<div class="flex relative">
 			{#if loading}
-				<div class="rounded-md aspect-[4/3] animate-pulse min-w-[100vw] bg-gray-200" />
+				<div class="rounded-t-md aspect-[4/3] animate-pulse min-w-[100vw] bg-gray-200" />
 			{/if}
 
-			{#each medias as media}
+			{#each mediasOk as media}
 				<div
 					class="relative w-full flex-shrink-0 inner-shadow min-w-0 aspect-[4/3]"
 					style="flex: 0 0 100%"
@@ -111,14 +109,14 @@
 					{#if media.type === 'image'}
 						<img
 							alt="Item"
-							src={media.url}
+							src={media.src}
 							on:load={handleLoad}
 							class="w-full h-full object-cover"
 						/>
 					{:else if media.type === 'video'}
 						<!-- svelte-ignore a11y-media-has-caption -->
 						<video
-							src={media.url}
+							src={media.src}
 							class="w-full h-full object-cover"
 							autoplay
 							controls={false}
@@ -132,7 +130,7 @@
 
 		<MediaDot
 			className="absolute bottom-2 w-full"
-			length={medias.length}
+			length={mediasOk.length}
 			current={currentIndex}
 			maxVisibleIndicators={5}
 		/>
@@ -146,20 +144,22 @@
 		</div>
 	</div>
 
-	<p
-		class="text-base text-neutral-750 mt-3 font-medium text-nowrap text-ellipsis overflow-hidden"
-		title={heading}
-	>
-		{heading}
-	</p>
-	<p class="text-sm text-neutral-750 font-normal">{subheading}</p>
-	<div class="grid grid-cols-2">
-		{#each features as feature}
-			<div>
-				<span class="text-xs text-neutral-250">{feature.label}: </span>
-				<span class="text-xs text-neutral-750 mr-2">{feature.value}</span>
-			</div>
-		{/each}
+	<div class="py-3 px-2">
+		<p
+			class="text-base text-neutral-750 mt-3 font-medium text-nowrap text-ellipsis overflow-hidden"
+			title={heading}
+		>
+			{heading}
+		</p>
+		<p class="text-sm text-neutral-750 font-normal">{subheading}</p>
+		<div class="grid grid-cols-2">
+			{#each features as feature}
+				<div>
+					<span class="text-xs text-neutral-250">{feature.label}: </span>
+					<span class="text-xs text-neutral-750 mr-2">{feature.value}</span>
+				</div>
+			{/each}
+		</div>
 	</div>
 </div>
 
