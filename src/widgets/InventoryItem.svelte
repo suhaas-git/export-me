@@ -79,6 +79,7 @@
 	}}
 	on:mousedown={handleMouseDown}
 	on:mouseup={handleMouseUp}
+	on:click
 >
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div class="p-2 absolute top-0 right-0 z-30" on:click={() => (starred = !starred)}>

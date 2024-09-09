@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
+@layer base {
 	/* Hide scrollbar for Chrome, Safari and Opera */
 	.no-scrollbar::-webkit-scrollbar {
 		display: none;
@@ -16,10 +16,26 @@
 	* {
 		font-family: 'Montserrat', sans-serif;
 		font-optical-sizing: auto;
+		outline: none;
 	}
 
-	html,
+	html {
+		height: 100%;
+	}
+
 	body {
+		min-height: 100vh;
+		width: 100vw;
+	}
+
+	body,
+	html {
 		box-sizing: border-box;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		text-rendering: optimizeLegibility;
+		font-feature-settings: 'liga', 'kern';
+		font-variation-settings: normal;
+		font-weight: 500;
 	}
 }

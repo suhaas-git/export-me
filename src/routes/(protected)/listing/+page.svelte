@@ -6,6 +6,7 @@
 	import getData from '@entities/data';
 
 	import Chips from '@shared/ui/Chips.svelte';
+	import { goto } from '$app/navigation';
 
 	let searchQuery = '';
 
@@ -15,6 +16,10 @@
 
 	async function fetchData() {
 		inventory = await getData();
+	}
+
+	function handleOnClick(item: Inventory) {
+		goto(`/detail/${item.id}`);
 	}
 
 	$: filteredInventory = inventory
@@ -49,8 +54,18 @@
 			<InventoryItem
 				subheading={item.itemDescription}
 				heading={item.item}
-				features={item.features}
+				features={[
+					{
+						label: 'Meter',
+						value: item.meter
+					},
+					{
+						label: 'Manufacturer',
+						value: item.manufacturer
+					}
+				]}
 				medias={item.gallery}
+				on:click={() => handleOnClick(item)}
 			/>
 		{/each}
 	</div>
