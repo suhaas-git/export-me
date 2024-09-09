@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { fly, fade, slide } from 'svelte/transition';
 	import type { Gallery as TGallery, GeneralAppearance, Inventory } from '@shared/types/inventory';
 
 	import scaleElementOnClick from '@shared/actions/scaleElementOnClick';
@@ -10,18 +11,21 @@
 	import { cx } from '@shared/utils/cx';
 	import { getDataById, getGallery, getGeneralAppearence } from '@entities/data';
 	import Gallery from '@shared/ui/Gallery.svelte';
+	import FullPageGallery from '@widgets/detail/FullPageGallery.svelte';
+	import { quintOut } from 'svelte/easing';
 
 	const id = $page.params.id;
 
 	let loading = false;
+	let fullPageGallery = false;
 	let itemData: Inventory | undefined;
 	let gallery: TGallery[] = [];
-	let details: {
+	let details: Partial<{
 		generalAppearance: GeneralAppearance;
-	} = {};
+	}> = {};
 
 	let isOpen = {
-		generalAppearance: false
+		generalAppearance: true
 	};
 
 	async function handleGetData(id: string) {
@@ -36,8 +40,12 @@
 	$: handleGetData(id);
 </script>
 
-<div class="w-full h-full pb-4">
-	<Gallery {gallery} className="shadow-md sticky top-0 w-full z-10" />
+<div class="w-full pb-4">
+	<Gallery
+		{gallery}
+		className="shadow-md  top-0 w-full z-10"
+		on:click={() => (fullPageGallery = !fullPageGallery)}
+	/>
 
 	<div class="relative pt-6 px-2 transition-all duration-300">
 		{#if itemData}
@@ -77,10 +85,12 @@
 					</div>
 
 					{#if isOpen[detail.key]}
-						<DetailTable itemData={details[detail.key]} />
+						<DetailTable itemData={details[detail.key]} {gallery} />
 					{/if}
 				</div>
 			{/each}
 		{/if}
 	</div>
 </div>
+
+<FullPageGallery onClose={() => (fullPageGallery = false)} {gallery} isVisible={fullPageGallery} />

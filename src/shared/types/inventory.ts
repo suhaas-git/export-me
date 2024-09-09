@@ -22,4 +22,5 @@ export interface GeneralAppearance {
 export interface Gallery {
 	type: 'image' | 'video';
 	src: string;
+	name: string;
 }

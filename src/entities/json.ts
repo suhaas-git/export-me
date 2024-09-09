@@ -74,47 +74,57 @@ export const gallery = [
 	{
 		id: '1',
 		src: serial,
-		type: 'image'
+		type: 'image',
+		name: 'Serial Number / VIN'
 	},
 	{
 		id: '2',
-		src: null
+		src: null,
+		name: 'CE Mark'
 	},
 	{
 		id: '3',
 		src: paint,
-		type: 'image'
+		type: 'image',
+		name: 'Paint'
 	},
 	{
 		id: '4',
 		src: sheetMetal,
-		type: 'image'
+		type: 'image',
+		name: 'Sheet Metal (fiberglass) Condition'
 	},
 	{
 		id: '5',
 		src: handRails,
-		type: 'image'
+		type: 'image',
+		name: 'Hand Rails'
 	},
 	{
 		id: '6',
 		src: exteriorLights,
-		type: 'image'
+		type: 'image',
+		name: 'Exterior Lights'
 	},
 	{
 		id: '7',
-		src: null
+		src: null,
+		name: 'Left Side Pic'
 	},
 	{
 		id: '8',
-		src: null
+		src: null,
+		name: 'Right Pic'
 	},
 	{
 		id: '9',
-		src: null
+		src: null,
+		name: 'Front and Back Pic'
 	},
 	{
 		id: '10',
-		src: null
+		src: null,
+		name: '360 Degree View'
 	}
 ];
 

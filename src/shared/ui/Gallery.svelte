@@ -23,10 +23,14 @@
 	$: okMedias = gallery.filter((media) => media.src);
 </script>
 
-<div class={cx(className)} use:emblaCarouselSvelte on:emblaInit={onInit}>
+<div
+	class={cx('overflow-hidden relative', className)}
+	use:emblaCarouselSvelte
+	on:emblaInit={onInit}
+>
 	<div class="flex relative">
 		{#each okMedias as media, i}
-			<div class="relative w-full flex-shrink-0 inner-shadow min-w-0">
+			<div class="relative w-full flex-shrink-0 inner-shadow min-w-0" on:click>
 				{#if media.type === 'image'}
 					<img alt="Item" src={media.src} class="w-full h-full object-cover" />
 				{:else if media.type === 'video'}
