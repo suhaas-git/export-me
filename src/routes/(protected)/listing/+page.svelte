@@ -1,21 +1,32 @@
 <script lang="ts">
 	import InventoryItem from '@widgets/InventoryItem.svelte';
 	import Search from '@widgets/Search.svelte';
-	import type { Inventory } from '@shared/types/inventory';
+	import type { Gallery, Inventory } from '@shared/types/inventory';
 
-	import getData from '@entities/data';
+	import getData, { getGallery } from '@entities/data';
 
 	import Chips from '@shared/ui/Chips.svelte';
 	import { goto } from '$app/navigation';
 
 	let searchQuery = '';
 
-	let inventory: Inventory[] = [];
+	let inventory: (Inventory & { gallery: Gallery[] })[] = [];
 
 	let filterType = 'All';
 
 	async function fetchData() {
-		inventory = await getData();
+		const basicInfo = await getData();
+
+		for (const item of basicInfo) {
+			const gallery = await getGallery(item.id);
+			inventory = [
+				...inventory,
+				{
+					...item,
+					gallery
+				}
+			];
+		}
 	}
 
 	function handleOnClick(item: Inventory) {

@@ -1,25 +1,24 @@
 export interface Inventory {
 	id: string;
+	item: string;
+	itemDescription: string;
 	type: string;
-	make: string;
-	model: string;
-	year: number;
-	condition: string;
-	basicInfoId: string;
-	specificationsId: string;
-	certificationId: string;
-	componentsId: string;
-	mediaGalleryId: string;
+	location: string;
+	serial: string;
+	createdAt: string;
+	meter: string;
+	manufacturer: string;
 }
 
-export interface BasicInfo {
-	id: string;
-	itemNumber: number;
-	location: string;
-	createdDate: string;
-	serialNumber: string;
-	meterReads: {
-		value: number;
-		unit: string;
+export interface GeneralAppearance {
+	[k: string]: {
+		label: string;
+		value: string;
+		src?: string;
 	};
+}
+
+export interface Gallery {
+	type: 'image' | 'video';
+	url: string;
 }
