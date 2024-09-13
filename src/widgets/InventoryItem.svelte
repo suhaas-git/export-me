@@ -62,8 +62,6 @@
 
 	$: mediasType = medias.map((media) => media.type);
 	$: mediasOk = medias.filter((media) => media.src);
-
-	$: console.log(mediasOk);
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->

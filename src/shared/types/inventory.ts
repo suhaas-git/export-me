@@ -1,4 +1,7 @@
 export interface Inventory {
+	sellerName: string;
+	sellerAgeInYears: number;
+	sellerLogo: string;
 	id: string;
 	item: string;
 	itemDescription: string;
@@ -11,16 +14,9 @@ export interface Inventory {
 	features: string[];
 }
 
-export interface GeneralAppearance {
-	[k: string]: {
-		label: string;
-		value: string;
-		src?: string;
-	};
-}
-
 export interface Gallery {
 	type: 'image' | 'video';
 	src: string;
 	name: string;
+	id: string;
 }

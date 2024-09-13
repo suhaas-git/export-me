@@ -10,10 +10,10 @@
 	class="max-w-md mx-auto overflow-hidden mt-4 grid grid-cols-2 gap-x-3 gap-y-4 pt-2"
 	transition:slide={{ delay: 0, duration: 200, axis: 'y' }}
 >
-	{#each values as value}
+	{#each values as data}
 		<div>
-			<p class="text-xs text-neutral-400 mb-1">{value.label}</p>
-			<p class="text-sm text-neutral-500">{value.value}</p>
+			<p class="text-xs text-neutral-400 mb-1">{data.label}</p>
+			<p class="text-sm text-neutral-500">{data.value ?? '-'}</p>
 		</div>
 	{/each}
 </div>
