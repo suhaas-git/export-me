@@ -1,43 +1,30 @@
-import type { Gallery, Inventory } from '@shared/types/inventory';
-import {
-	basicInfo,
-	gallery,
-	generalAppearance,
-	chasis,
-	controlStation,
-	drivetrain,
-	engine,
-	hydraulics,
-	safety,
-	undercarriage
-} from '@entities/json';
+import type { Gallery } from '@shared/types/inventory';
+import { escavatorData } from '@entities/escavator';
 
-export async function getDetails(id: string): Promise<any> {
-	return [
-		generalAppearance,
-		chasis,
-		controlStation,
-		drivetrain,
-		engine,
-		hydraulics,
-		safety,
-		undercarriage
-	];
+type Id = 'cat-escavator';
+type CategoryId = 'heavy-machines';
+
+const data: Record<Id, any> = {
+	'cat-escavator': escavatorData
+};
+
+export async function getDetails(id: Id) {
+	return data[id].details;
 }
 
-export async function getGallery(id: string): Promise<Gallery[]> {
-	return gallery;
+export async function getGallery(id: Id): Promise<Gallery[]> {
+	return data[id].gallery;
 }
 
-export async function getBasicInfo(id: string): Promise<Inventory> {
-	return new Promise((resolve) => {
-		// @ts-expect-error
-		resolve([basicInfo].find((e) => e.id === id));
-	});
+export async function getBasicInfo(id: Id) {
+	console.log(data, id);
+	return data[id].basicInfo;
 }
 
-export default async function getData(): Promise<Inventory[]> {
-	return new Promise((resolve) => {
-		resolve([basicInfo]);
+export default async function getData(id: CategoryId) {
+	return Object.values(data).map((item) => {
+		if (item.basicInfo.category === id) {
+			return item.basicInfo;
+		}
 	});
 }

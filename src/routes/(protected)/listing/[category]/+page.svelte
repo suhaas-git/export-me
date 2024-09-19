@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+
 	import InventoryItem from '@widgets/InventoryItem.svelte';
 	import Search from '@widgets/Search.svelte';
 	import type { Gallery, Inventory } from '@shared/types/inventory';
@@ -14,7 +16,7 @@
 	let filterType = 'All';
 
 	async function fetchData() {
-		const basicInfo = await getData();
+		const basicInfo = await getData($page.params.category);
 		const newInventory: any = [];
 
 		for (const item of basicInfo) {
@@ -26,7 +28,7 @@
 	}
 
 	function handleOnClick(item: Inventory) {
-		goto(`/detail/${item.id}`);
+		goto(`/listing/${item.category}/detail/${item.id}`);
 	}
 
 	$: filteredInventory = inventory

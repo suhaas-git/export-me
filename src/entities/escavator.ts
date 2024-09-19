@@ -766,9 +766,10 @@ export const gallery: Gallery[] = [
 
 export const basicInfo = {
 	sellerName: 'AR Enterprise',
+	category: 'heavy-machines',
 	sellerAgeInYears: 20,
 	sellerLogo: ar,
-	id: 'qwe123',
+	id: 'cat-escavator',
 	item: '2024 FF Industrial FF-15 Mini Excavator - Unused',
 	itemDescription: 'Excavator 210D',
 	type: 'Excavator',
@@ -783,5 +784,20 @@ export const basicInfo = {
 		'Rubber Tracks',
 		'44 in Digging Bucket',
 		'Manual Thumb'
+	]
+};
+
+export const escavatorData = {
+	basicInfo,
+	gallery,
+	details: [
+		generalAppearance,
+		chasis,
+		controlStation,
+		drivetrain,
+		engine,
+		hydraulics,
+		safety,
+		undercarriage
 	]
 };

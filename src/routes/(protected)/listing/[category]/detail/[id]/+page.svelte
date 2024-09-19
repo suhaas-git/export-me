@@ -54,7 +54,7 @@
 
 		<div
 			class="absolute top-2 left-2 z-10 p-2 bg-white inline-flex rounded-full text-black shadow"
-			on:click={() => goto('/listing')}
+			on:click={() => goto(`/listing/${$page.params.category}`)}
 		>
 			<ArrowRight className="rotate-180" />
 		</div>
