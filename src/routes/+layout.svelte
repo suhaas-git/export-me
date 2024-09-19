@@ -6,7 +6,7 @@
 	import { page } from '$app/stores';
 
 	onMount(() => {
-		// if ($page.url.pathname === '/') goto('/listing');
+		// if ($page.url.pathname === '/') goto('/');
 	});
 </script>
 

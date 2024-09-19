@@ -8,10 +8,10 @@
 	import { goto } from '$app/navigation';
 
 	const categories = [
-		{ label: 'Electricals', href: '/listing/electricals', img: electricals },
-		{ label: 'Heavy Machines', href: '/listing/heavy-machines', img: heavyMachine },
-		{ label: 'Wire Harness', href: '/listing/heavy-machines', img: harness },
-		{ label: 'Sheet Metal', href: '/listing/heavy-machines', img: sheetMetal }
+		{ label: 'Electricals', href: '/electricals', img: electricals },
+		{ label: 'Heavy Machines', href: '/heavy-machines', img: heavyMachine },
+		{ label: 'Wire Harness', href: '/wire-harness', img: harness },
+		{ label: 'Sheet Metal', href: '/sheet-metal', img: sheetMetal }
 	];
 
 	const offerings = [

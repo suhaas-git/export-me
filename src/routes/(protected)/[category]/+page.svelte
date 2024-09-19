@@ -8,6 +8,7 @@
 	import Chips from '@shared/ui/Chips.svelte';
 	import { goto } from '$app/navigation';
 	import getData, { getGallery } from '@entities/data';
+	import ArrowRight from '@shared/assets/icons/ArrowRight.svelte';
 
 	let searchQuery = '';
 
@@ -28,7 +29,7 @@
 	}
 
 	function handleOnClick(item: Inventory) {
-		goto(`/listing/${item.category}/detail/${item.id}`);
+		goto(`/${item.category}/detail/${item.id}`);
 	}
 
 	$: filteredInventory = inventory
@@ -47,7 +48,10 @@
 		class="sticky top-0 z-[1000] bg-white flex flex-col gap-4 pt-4 pb-4"
 		style="box-shadow: rgb(0 0 0/16%) 0 0 6px"
 	>
-		<div class="px-4">
+		<div class="flex items-center pr-4">
+			<div class="-rotate-180 px-4" on:click={() => goto('/')}>
+				<ArrowRight />
+			</div>
 			<Search bind:value={searchQuery} />
 		</div>
 
