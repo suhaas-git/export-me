@@ -64,10 +64,9 @@
 	$: mediasOk = medias.filter((media) => media.src);
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<div
+<button
 	class={cx(
-		'relative transition-colors rounded-b-xl shadow-md',
+		'relative transition-colors rounded-b-xl shadow-md text-left',
 		isMouseDown ? 'bg-gray-100' : 'bg-white'
 	)}
 	style="flex: 0 0 100%"
@@ -78,16 +77,20 @@
 	on:mouseup={handleMouseUp}
 	on:click
 >
-	<div class="p-2 absolute top-0 right-0 z-30" on:click={() => (starred = !starred)}>
-		<div
+	<button
+		tabindex="0"
+		class="p-2 absolute top-0 right-0 z-30"
+		on:click={() => (starred = !starred)}
+	>
+		<span
 			class={cx(
 				'flex items-center justify-center bg-black/20 rounded-full p-1 cursor-pointer transition-colors',
 				starred ? 'text-white' : 'text-transparent'
 			)}
 		>
 			<Heart className={cx('w-6 h-6')} />
-		</div>
-	</div>
+		</span>
+	</button>
 
 	<div
 		class="wrapper flex relative overflow-hidden rounded-t-xl no-scrollbar"
@@ -109,7 +112,7 @@
 							alt="Item"
 							src={media.src}
 							on:load={handleLoad}
-							class="w-full h-full object-cover"
+							class="w-full h-full object-contain"
 						/>
 					{:else if media.type === 'video'}
 						<!-- svelte-ignore a11y-media-has-caption -->
@@ -150,16 +153,16 @@
 			{heading}
 		</p>
 		<p class="text-sm text-neutral-750 font-normal">{subheading}</p>
-		<div class="grid grid-cols-2">
+		<div class="flex gap-4 mt-3 flex-wrap">
 			{#each features as feature}
-				<div>
-					<span class="text-xs text-neutral-250">{feature.label}: </span>
-					<span class="text-xs text-neutral-750 mr-2">{feature.value}</span>
-				</div>
+				<span class="inline text-sm">
+					<span class="text-neutral-250">{feature.label}: </span>
+					<span class="text-neutral-750">{feature.value}</span>
+				</span>
 			{/each}
 		</div>
 	</div>
-</div>
+</button>
 
 <style>
 	.inner-shadow::after {
@@ -169,7 +172,7 @@
 		left: 0;
 		right: 0;
 		height: 40%;
-		background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+		background: linear-gradient(to top, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0));
 		pointer-events: none;
 	}
 </style>

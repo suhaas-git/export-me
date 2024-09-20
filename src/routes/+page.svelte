@@ -5,10 +5,11 @@
 	import harness from '@shared/assets/images/harness.png';
 	import heavyMachine from '@shared/assets/images/heavy-machine.png';
 
+	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 
 	const categories = [
-		{ label: 'Electricals', href: '/electricals', img: electricals },
+		{ label: 'Electricals', href: '/family/cables', img: electricals },
 		{ label: 'Heavy Machines', href: '/heavy-machines', img: heavyMachine },
 		{ label: 'Wire Harness', href: '/wire-harness', img: harness },
 		{ label: 'Sheet Metal', href: '/sheet-metal', img: sheetMetal }
@@ -32,10 +33,13 @@
 	];
 </script>
 
-<div class="bg-[#f5f5f5] min-h-screen py-6 px-4 no-scrollbar">
+<div
+	class="bg-[#f5f5f5] min-h-screen py-6 px-4 no-scrollbar"
+	transition:fade={{ duration: 100, axis: 'y' }}
+>
 	<div class="max-w-4xl mx-auto mt-10">
 		<header class="text-center mb-16">
-			<img src={logo} alt="Qivly" class="w-40 mx-auto mb-4" />
+			<img src={logo} alt="Qivly" class="w-40 h-[140px] mx-auto mb-4" />
 			<p class="text-4xl text-amber-650 font-bold capitalize mb-4">Seamlessly export</p>
 
 			<p class="text-xl font-medium text-amber-600">
@@ -47,16 +51,16 @@
 			<p class="text-3xl font-semibold text-gray-800 text-center mb-8">Our categories</p>
 			<div class="grid grid-cols-2 gap-6">
 				{#each categories as category}
-					<div
+					<button
 						on:click={() => goto(category.href)}
 						class="bg-white rounded-lg shadow-md p-4 flex flex-col gap-1 items-center justify-between hover:bg-amber-50 transition-colors text-center
 									text-base font-medium text-gray-700"
 					>
+						<img src={category.img} class="h-[155px] object-contain" />
 						<span>
 							{category.label}
 						</span>
-						<img src={category.img} class="h-[155px] object-contain" />
-					</div>
+					</button>
 				{/each}
 			</div>
 		</section>

@@ -9,6 +9,10 @@
 	import { goto } from '$app/navigation';
 	import getData, { getGallery } from '@entities/data';
 	import ArrowRight from '@shared/assets/icons/ArrowRight.svelte';
+	import type { Filter } from '@shared/types/filter';
+	import { getFilter } from '@entities/filter';
+
+	let category = $page.params.category;
 
 	let searchQuery = '';
 
@@ -16,8 +20,12 @@
 
 	let filterType = 'All';
 
+	let filters: Filter[] = [];
+
 	async function fetchData() {
-		const basicInfo = await getData($page.params.category);
+		filters = await getFilter(category);
+
+		const basicInfo = await getData(category);
 		const newInventory: any = [];
 
 		for (const item of basicInfo) {
@@ -32,8 +40,13 @@
 		goto(`/${item.category}/detail/${item.id}`);
 	}
 
+	$: filterValue = filters.find((e) => e.label === filterType)?.value;
+
 	$: filteredInventory = inventory
-		.filter((e) => filterType === 'All' || e.type === filterType)
+		.filter(
+			//@ts-expect-error
+			(e) => filterType === 'All' || e.type.includes(filterValue)
+		)
 		.filter(
 			(e) =>
 				e.item.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -49,15 +62,15 @@
 		style="box-shadow: rgb(0 0 0/16%) 0 0 6px"
 	>
 		<div class="flex items-center pr-4">
-			<div class="-rotate-180 px-4" on:click={() => goto('/')}>
+			<button class="-rotate-180 px-4" on:click={() => goto('/')}>
 				<ArrowRight />
-			</div>
+			</button>
 			<Search bind:value={searchQuery} />
 		</div>
 
 		<Chips
 			bind:selectedValue={filterType}
-			options={['All', 'Wheel Loader', 'Excavator', 'Backhoe Loader', 'Truck Tractor']}
+			options={filters.map((e) => e.label)}
 			defaultValue="All"
 		/>
 	</div>
@@ -67,16 +80,13 @@
 			<InventoryItem
 				subheading={item.itemDescription}
 				heading={item.item}
-				features={[
-					{
-						label: 'Meter',
-						value: item.meter
-					},
-					{
-						label: 'Manufacturer',
-						value: item.manufacturer
-					}
-				]}
+				features={Object.entries(item.others)
+					.splice(0, 3)
+					.map((e) => {
+						const [key, value] = e;
+
+						return { label: key, value };
+					})}
 				medias={item.gallery}
 				on:click={() => handleOnClick(item)}
 			/>

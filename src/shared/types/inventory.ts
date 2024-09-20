@@ -1,17 +1,17 @@
 export interface Inventory {
-	sellerName: string;
-	sellerAgeInYears: number;
-	sellerLogo: string;
+	category: string;
+	sellerId: string;
+	// sellerName: string;
+	// sellerAgeInYears: number;
+	// sellerLogo: string;
 	id: string;
 	item: string;
 	itemDescription: string;
-	type: string;
-	location: string;
-	serial: string;
-	createdAt: string;
-	meter: string;
-	manufacturer: string;
 	features: string[];
+	createdAt: string;
+	type: string[];
+
+	others: Record<string, any>;
 }
 
 export interface Gallery {

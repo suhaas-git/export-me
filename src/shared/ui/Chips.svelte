@@ -34,7 +34,7 @@
 		<button
 			use:melt={$item(option)}
 			class={cx(
-				'flex rounded-3xl flex-1 py-2 px-4 transition-all text-sm font-medium text-nowrap',
+				'flex rounded-3xl flex-1 py-2 px-4 transition-all text-sm font-medium text-nowrap w-fit',
 				isOptionSelected ? 'bg-amber-60' : 'bg-gray-250',
 				isOptionSelected ? 'text-amber-650' : 'text-black',
 				classNames.item

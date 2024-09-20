@@ -14,14 +14,15 @@
 	import Check from '@shared/assets/icons/Check.svelte';
 	import ArrowRight from '@shared/assets/icons/ArrowRight.svelte';
 	import { goto } from '$app/navigation';
+	import { getSellerById, type Seller } from '@entities/seller';
+	import dayjs from 'dayjs';
+	import Tag from '@shared/ui/Tag.svelte';
 
 	const id = $page.params.id;
 
-	let loading = false;
-
 	let fullPageGallery = false;
 
-	let itemData: Inventory | undefined;
+	let itemData: Inventory;
 
 	let gallery: TGallery[] = [];
 
@@ -31,14 +32,13 @@
 
 	let isHidden: { [k: string]: boolean } = {};
 
-	async function handleGetData(id: string) {
-		loading = true;
+	let seller: Seller;
 
+	async function handleGetData(id: string) {
 		itemData = await getBasicInfo(id);
 		gallery = await getGallery(id);
 		details = await getDetails(id);
-
-		loading = false;
+		seller = await getSellerById(itemData.sellerId);
 	}
 
 	$: handleGetData(id);
@@ -52,32 +52,40 @@
 			on:click={() => (fullPageGallery = !fullPageGallery)}
 		/>
 
-		<div
-			class="absolute top-2 left-2 z-10 p-2 bg-white inline-flex rounded-full text-black shadow"
+		<button
+			class="fixed top-2 left-2 z-10 p-2 bg-white inline-flex rounded-full text-black shadow"
 			on:click={() => goto(`/${$page.params.category}`)}
 		>
 			<ArrowRight className="rotate-180" />
-		</div>
+		</button>
 	</div>
 
 	<div class="relative transition-all duration-300">
 		{#if itemData}
+			{@const otherData = Object.values(itemData.others)}
 			<div class="bg-white p-4 shadow-sm">
 				<p class="text-base font-semibold mb-2">{itemData.item}</p>
-				<p class="text-sm font-normal text-neutral-500">
-					{itemData.meter} · {itemData.manufacturer} · {itemData.createdAt}
+				<p class="text-sm font-normal text-neutral-500 gap-2 flex flex-wrap">
+					{#each otherData as data}
+						<Tag>
+							{data}
+						</Tag>
+					{/each}
+					<Tag>
+						{dayjs(itemData.createdAt).format('DD MMM, YY')}
+					</Tag>
 				</p>
 
-				{#if itemData}
+				{#if seller}
 					<Divider className="mt-6 mb-4" />
 					<div class="flex gap-5 items-center cursor-pointer">
-						<img class="w-14 h-14 rounded-full bg-gray-300" src={itemData.sellerLogo} />
+						<img class="w-14 h-14 rounded-full shadow" src={seller.sellerLogo} alt="seller-logo" />
 						<div class="flex flex-col">
 							<p class="text-xl text-neutral-950 font-medium">
-								{itemData.sellerName}
+								{seller.name}
 							</p>
 							<p class="text-sm text-neutral-500">
-								{itemData.sellerAgeInYears}yr’s in the business
+								{seller.age}yr’s in the business
 							</p>
 						</div>
 					</div>
@@ -94,22 +102,24 @@
 
 			<Divider className="my-4" />
 
-			<div class="rounded-xl bg-white p-4 shadow-sm mx-3">
-				<span class="text-neutral-750 font-medium">Top Features</span>
+			{#if itemData.features.length > 0}
+				<div class="rounded-xl bg-white p-4 shadow-sm mx-3">
+					<span class="text-neutral-750 text-base font-medium">Top Features</span>
+
+					<Divider className="my-4" />
+
+					<div class="flex flex-col gap-3">
+						{#each itemData.features as feature}
+							<div class="flex gap-2 items-center text-neutral-500">
+								<Check />
+								<span class="text-sm">{feature} </span>
+							</div>
+						{/each}
+					</div>
+				</div>
 
 				<Divider className="my-4" />
-
-				<div class="flex flex-col gap-3">
-					{#each itemData.features as feature}
-						<div class="flex gap-2 items-center text-neutral-500">
-							<Check />
-							<span class="text-sm">{feature} </span>
-						</div>
-					{/each}
-				</div>
-			</div>
-
-			<Divider className="my-4" />
+			{/if}
 
 			{#each Object.entries(details) as [key, detail]}
 				{@const { label, ...itemData } = detail}

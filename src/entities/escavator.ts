@@ -48,8 +48,8 @@ import rightTrackRollers from '@shared/assets/images/Right Track Rollers.jpg';
 import rightFrontIdler from '@shared/assets/images/Right_Front_Idler.jpg';
 import rightSprocket from '@shared/assets/images/Right_Sprocket.jpg';
 import safetyLock from '@shared/assets/images/safety.jpg';
-import type { Gallery } from '@shared/types/inventory';
-import ar from '@shared/assets/images/ar.png';
+import type { Gallery, Inventory } from '@shared/types/inventory';
+import dayjs from 'dayjs';
 
 export const generalAppearance = {
 	label: 'General Appearance',
@@ -764,20 +764,22 @@ export const gallery: Gallery[] = [
 	}
 ];
 
-export const basicInfo = {
-	sellerName: 'AR Enterprise',
+export const basicInfo: Inventory = {
 	category: 'heavy-machines',
-	sellerAgeInYears: 20,
-	sellerLogo: ar,
+	sellerId: 'ar',
 	id: 'cat-escavator',
 	item: '2024 FF Industrial FF-15 Mini Excavator - Unused',
 	itemDescription: 'Excavator 210D',
-	type: 'Excavator',
-	meter: '5,589 hrs',
-	manufacturer: 'Volvo',
-	createdAt: '2024-01-01',
-	location: 'Dubai, ARE',
-	serial: '123456',
+	type: ['escavator'],
+	createdAt: dayjs().toISOString(),
+	others: {
+		Manufacturer: 'Volvo',
+		Model: 'EC210D',
+		Year: '2024',
+		Serial: '123456',
+		Location: 'Dubai, ARE',
+		Meter: '5,589 hrs'
+	},
 	features: [
 		'Auxiliary Hydraulic Plumbing',
 		'Backfill Blade',
