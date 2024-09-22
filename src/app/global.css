@@ -3,6 +3,18 @@
 @tailwind utilities;
 
 @layer base {
+	@keyframes gradientBackground {
+		0% {
+			background-position: 0% 50%;
+		}
+		50% {
+			background-position: 100% 50%;
+		}
+		100% {
+			background-position: 0% 50%;
+		}
+	}
+
 	/* Hide scrollbar for Chrome, Safari and Opera */
 	.no-scrollbar::-webkit-scrollbar {
 		display: none;
@@ -14,19 +26,23 @@
 	}
 
 	* {
-		font-family: 'Montserrat', sans-serif;
+		font-family: 'Inter', sans-serif;
+		font-style: normal;
 		font-optical-sizing: auto;
 		outline: none;
 	}
 
 	html {
 		height: 100%;
+		scroll-behavior: smooth;
 	}
 
 	body {
 		min-height: 100vh;
 		width: 100vw;
-		background: #f6f6f6;
+		background: linear-gradient(-45deg, #f6f6f6, #ffffff, #f0f0f0, #fafafa);
+		background-size: 400% 400%;
+		animation: gradientBackground 15s ease infinite;
 	}
 
 	body,
@@ -38,5 +54,46 @@
 		font-feature-settings: 'liga', 'kern';
 		font-variation-settings: normal;
 		font-weight: 500;
+	}
+
+	/* Modern focus styles */
+	*:focus {
+		outline: none;
+		box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+		transition: box-shadow 0.3s ease-in-out;
+	}
+
+	/* Smooth transitions for interactive elements */
+	a,
+	button,
+	input,
+	select,
+	textarea {
+		transition: all 0.3s ease-in-out;
+	}
+
+	/* Custom selection color */
+	::selection {
+		background-color: rgba(66, 153, 225, 0.3);
+	}
+}
+
+/* Modern scrollbar styles */
+@media screen and (min-width: 768px) {
+	::-webkit-scrollbar {
+		width: 10px;
+	}
+
+	::-webkit-scrollbar-track {
+		background: #f1f1f1;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background: #888;
+		border-radius: 5px;
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background: #555;
 	}
 }

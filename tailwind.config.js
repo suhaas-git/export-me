@@ -13,8 +13,12 @@ export default {
 				},
 				amber: {
 					60: '#ffecde',
-					650: '#ff7711'
-				}
+					650: '#ff7711',
+					450: '#FFB84C'
+				},
+				navy: '#1E3D58',
+				charcoal: '#3C4048',
+				offWhite: '#F5F5F5'
 			}
 		}
 	},

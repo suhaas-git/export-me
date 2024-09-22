@@ -5,44 +5,30 @@
 	import { cx } from '@shared/utils/cx';
 
 	import emblaCarouselSvelte, { type EmblaCarouselSvelteType } from 'embla-carousel-svelte';
-	import type { HTMLMediaAttributes, HTMLVideoAttributes } from 'svelte/elements';
+	import type { HTMLMediaAttributes } from 'svelte/elements';
 	import { fade } from 'svelte/transition';
 	import type { Gallery } from '@shared/types/inventory';
 
 	export let heading = '';
-
 	export let subheading = '';
-
-	export let features: {
-		label: string;
-		value: string;
-	}[] = [];
-
+	export let features: { label: string; value: string }[] = [];
 	export let medias: Gallery[] = [];
-
 	export let videoProps: HTMLMediaAttributes<HTMLVideoElement> = {};
 
 	let loading = true;
-
 	let starred = false;
-
 	let isMouseDown = false;
-
 	let emblaApi: EmblaCarouselSvelteType;
-
 	let currentIndex = 0;
-
 	let timeout: number;
 
 	function logEmblaEvent(emblaApi: EmblaCarouselSvelteType): void {
-		//@ts-ignore
 		currentIndex = emblaApi.selectedScrollSnap();
 	}
 
 	function onInit(event: CustomEvent<EmblaCarouselSvelteType>): void {
 		emblaApi = event.detail;
-		//@ts-ignore
-		emblaApi.on('slidesInView', logEmblaEvent);
+		emblaApi.on('select', logEmblaEvent);
 	}
 
 	function handleLoad(): void {
@@ -60,19 +46,15 @@
 		}, 200);
 	}
 
-	$: mediasType = medias.map((media) => media.type);
 	$: mediasOk = medias.filter((media) => media.src);
 </script>
 
 <button
 	class={cx(
-		'relative transition-colors rounded-b-xl shadow-md text-left',
-		isMouseDown ? 'bg-gray-100' : 'bg-white'
+		'relative transition-colors rounded-xl shadow-md text-left w-full',
+		isMouseDown ? 'bg-amber-60' : 'bg-white'
 	)}
-	style="flex: 0 0 100%"
-	transition:fade={{
-		duration: 100
-	}}
+	transition:fade={{ duration: 100 }}
 	on:mousedown={handleMouseDown}
 	on:mouseup={handleMouseUp}
 	on:click
@@ -80,15 +62,15 @@
 	<button
 		tabindex="0"
 		class="p-2 absolute top-0 right-0 z-30"
-		on:click={() => (starred = !starred)}
+		on:click|stopPropagation={() => (starred = !starred)}
 	>
 		<span
 			class={cx(
 				'flex items-center justify-center bg-black/20 rounded-full p-1 cursor-pointer transition-colors',
-				starred ? 'text-white' : 'text-transparent'
+				starred ? 'text-amber-650' : 'text-transparent'
 			)}
 		>
-			<Heart className={cx('w-6 h-6')} />
+			<Heart className="w-6 h-6" />
 		</span>
 	</button>
 
@@ -99,7 +81,7 @@
 	>
 		<div class="flex relative">
 			{#if loading}
-				<div class="rounded-t-md aspect-[4/3] animate-pulse min-w-[100vw] bg-gray-200" />
+				<div class="rounded-t-xl aspect-[4/3] animate-pulse w-full bg-gray-250" />
 			{/if}
 
 			{#each mediasOk as media}
@@ -109,7 +91,7 @@
 				>
 					{#if media.type === 'image'}
 						<img
-							alt="Item"
+							alt={heading}
 							src={media.src}
 							on:load={handleLoad}
 							class="w-full h-full object-contain"
@@ -123,6 +105,7 @@
 							controls={false}
 							loop
 							muted
+							{...videoProps}
 						/>
 					{/if}
 				</div>
@@ -138,26 +121,26 @@
 
 		<div class="absolute bottom-0 right-0 p-2 bg-white rounded-tl-[30px] z-30">
 			<button
-				class="flex items-center justify-center w-12 h-12 text-white bg-amber-650 rounded-full"
+				class="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 text-white bg-amber-650 rounded-full hover:bg-amber-450 transition-colors"
 			>
 				<ArrowRight />
 			</button>
 		</div>
 	</div>
 
-	<div class="py-3 px-2">
+	<div class="py-3 px-4">
 		<p
-			class="text-base text-neutral-750 mt-3 font-medium text-nowrap text-ellipsis overflow-hidden"
+			class="text-base sm:text-lg text-charcoal font-medium text-ellipsis overflow-hidden"
 			title={heading}
 		>
 			{heading}
 		</p>
-		<p class="text-sm text-neutral-750 font-normal">{subheading}</p>
-		<div class="flex gap-4 mt-3 flex-wrap">
+		<p class="text-sm sm:text-base text-neutral-750 font-normal mt-1">{subheading}</p>
+		<div class="flex flex-wrap gap-2 sm:gap-4 mt-3">
 			{#each features as feature}
-				<span class="inline text-sm">
+				<span class="inline text-xs sm:text-sm">
 					<span class="text-neutral-250">{feature.label}: </span>
-					<span class="text-neutral-750">{feature.value}</span>
+					<span class="text-charcoal">{feature.value}</span>
 				</span>
 			{/each}
 		</div>
