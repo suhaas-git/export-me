@@ -4,9 +4,15 @@
 	import electricals from '@shared/assets/images/electricals.png';
 	import harness from '@shared/assets/images/harness.png';
 	import heavyMachine from '@shared/assets/images/heavy-machine.png';
-
-	import { fade } from 'svelte/transition';
+	import { fade, fly } from 'svelte/transition';
 	import { goto } from '$app/navigation';
+	import SearchIcon from '@shared/assets/icons/Search.svelte';
+
+	let searchQuery = '';
+
+	function handleSearch() {
+		goto(`/search?q=${encodeURIComponent(searchQuery)}`);
+	}
 
 	const categories = [
 		{ label: 'Electricals', href: '/family/cables', img: electricals },
@@ -14,75 +20,67 @@
 		{ label: 'Wire Harness', href: '/wire-harness', img: harness },
 		{ label: 'Sheet Metal', href: '/sheet-metal', img: sheetMetal }
 	];
-
-	const offerings = [
-		{
-			title: 'Building Online Brand',
-			description:
-				'Build a compelling product portfolio and establish an online presence to attract buyers and gain their trust.'
-		},
-		{
-			title: 'Export Logistics and Certifications',
-			description:
-				'We handle all hassles and logistics, so you can focus on your products and quality.'
-		},
-		{
-			title: 'Buyer and Vendor Verifications',
-			description: 'Verified buyers ensure secure payments, giving you peace of mind.'
-		}
-	];
 </script>
 
-<div
-	class="bg-[#f5f5f5] min-h-screen py-6 px-4 no-scrollbar"
-	transition:fade={{ duration: 100, axis: 'y' }}
->
-	<div class="max-w-4xl mx-auto mt-10">
-		<header class="text-center mb-16">
-			<img src={logo} alt="Qivly" class="w-40 h-[140px] mx-auto mb-4" />
-			<p class="text-4xl text-amber-650 font-bold capitalize mb-4">Seamlessly export</p>
+<div class="min-h-screen flex flex-col bg-white" transition:fade={{ duration: 300 }}>
+	<main class="flex-grow flex flex-col items-center justify-center px-4 relative">
+		<div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-gray-50 to-white"></div>
+		<div class="w-full max-w-2xl z-10">
+			<img
+				src={logo}
+				alt="Qivly"
+				class="w-[150px] mx-auto mb-12 mt-12 drop-shadow-md"
+				transition:fly={{ y: -20, duration: 500 }}
+			/>
 
-			<p class="text-xl font-medium text-amber-600">
-				Go global instantly - sell your products worldwide with just a click.
-			</p>
-		</header>
+			<form
+				on:submit|preventDefault={handleSearch}
+				class="relative w-full mb-8 flex flex-col gap-2 bg-red-900 rounded-full"
+			>
+				<input
+					type="text"
+					bind:value={searchQuery}
+					placeholder="Search for products..."
+					class="w-full py-4 px-4 rounded-full bg-white text-base text-gray-800 placeholder-gray-400 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent shadow-md transition-all duration-300 ease-in-out"
+				/>
 
-		<section>
-			<p class="text-3xl font-semibold text-gray-800 text-center mb-8">Our categories</p>
-			<div class="grid grid-cols-2 gap-6">
+				<button
+					type="submit"
+					class="absolute right-2 top-2/4 -translate-y-2/4 p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-all duration-300 ease-in-out"
+				>
+					<SearchIcon className="w-7 h-7" />
+				</button>
+			</form>
+		</div>
+	</main>
+
+	<footer class="py-12 bg-gray-50">
+		<div class="max-w-4xl mx-auto px-4">
+			<div class="grid grid-cols-2 gap-2 mb-8">
 				{#each categories as category}
-					<button
-						on:click={() => goto(category.href)}
-						class="bg-white rounded-lg shadow-md p-4 flex flex-col gap-1 items-center justify-between hover:bg-amber-50 transition-colors text-center
-									text-base font-medium text-gray-700"
-					>
-						<img src={category.img} class="h-[155px] object-contain" />
-						<span>
+					<a href={category.href} class="flex flex-col items-center group">
+						<div
+							class="w-full bg-white shadow-md flex items-center justify-center mb-4 group-hover:shadow-lg group-hover:scale-105 transition-all duration-300 ease-in-out p-2 rounded-md"
+						>
+							<img src={category.img} alt={category.label} class="w-12 h-12 object-cover" />
+						</div>
+						<span
+							class="text-sm text-gray-700 group-hover:text-blue-600 transition-colors duration-300"
+						>
 							{category.label}
 						</span>
-					</button>
+					</a>
 				{/each}
 			</div>
-		</section>
-
-		<section class="mt-16">
-			<p class="text-3xl font-semibold text-gray-800 text-center mb-8">Our Mission</p>
-			<p class="text-base text-gray-700 mb-4">
-				Empowering SMEs to grow globally through a tech-enabled platform that simplifies exports and
-				access to international buyers.
-			</p>
-		</section>
-
-		<section class="mt-16">
-			<p class="text-3xl font-semibold text-gray-800 text-center mb-8">Our offerings to SMEs</p>
-			<div class="grid md:grid-cols-3 gap-5">
-				{#each offerings as offering}
-					<div class="bg-white rounded-lg shadow-md p-3 transition-all hover:shadow-lg">
-						<h3 class="text-base font-semibold text-amber-650 mb-4">{offering.title}</h3>
-						<p class="text-sm text-gray-600">{offering.description}</p>
-					</div>
-				{/each}
+			<div class="w-full h-px bg-gray-200 mb-8"></div>
+			<div class="flex justify-center items-center mb-4">
+				<a
+					href="/about-us"
+					class="text-sm text-blue-600 hover:text-blue-800 transition-colors duration-300"
+					>About Us</a
+				>
 			</div>
-		</section>
-	</div>
+			<p class="text-center text-sm text-gray-600">© 2024 Qivly. All rights reserved.</p>
+		</div>
+	</footer>
 </div>

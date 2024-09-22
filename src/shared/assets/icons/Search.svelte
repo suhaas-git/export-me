@@ -1,4 +1,10 @@
-<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+<script>
+	import { cx } from '@shared/utils/cx.js';
+
+	export let className = undefined;
+</script>
+
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" class={cx(className)}>
 	<path
 		fill-rule="evenodd"
 		clip-rule="evenodd"

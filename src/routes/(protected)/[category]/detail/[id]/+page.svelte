@@ -17,6 +17,8 @@
 	import { getSellerById, type Seller } from '@entities/seller';
 	import dayjs from 'dayjs';
 	import Tag from '@shared/ui/Tag.svelte';
+	import RequestQuoteForm from '@features/RequestQuoteForm.svelte';
+	import BottomSheet from '@shared/ui/BottomSheet.svelte';
 
 	const id = $page.params.id;
 
@@ -33,6 +35,8 @@
 	let isHidden: { [k: string]: boolean } = {};
 
 	let seller: Seller;
+
+	let isRequestingForm = false;
 
 	async function handleGetData(id: string) {
 		itemData = await getBasicInfo(id);
@@ -95,6 +99,7 @@
 				<button
 					use:scaleElementOnClick
 					class="bg-amber-650 text-white rounded-md p-3 w-full font-bold text-sm"
+					on:click={() => (isRequestingForm = true)}
 				>
 					Request a Quote
 				</button>
@@ -161,3 +166,7 @@
 	onClose={() => (fullPageGallery = false)}
 	isVisible={fullPageGallery}
 />
+
+<BottomSheet bind:isOpen={isRequestingForm}>
+	<RequestQuoteForm on:submit={() => (isRequestingForm = false)} />
+</BottomSheet>

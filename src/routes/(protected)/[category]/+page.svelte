@@ -1,95 +1,42 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-
-	import InventoryItem from '@widgets/InventoryItem.svelte';
-	import Search from '@widgets/Search.svelte';
-	import type { Gallery, Inventory } from '@shared/types/inventory';
-
-	import Chips from '@shared/ui/Chips.svelte';
+	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import getData, { getGallery } from '@entities/data';
-	import ArrowRight from '@shared/assets/icons/ArrowRight.svelte';
-	import type { Filter } from '@shared/types/filter';
 	import { getFilter } from '@entities/filter';
+	import InventoryList from '@widgets/inventories/InventoryList.svelte';
+	import type { Gallery, Inventory } from '@shared/types/inventory';
+	import type { Filter } from '@shared/types/filter';
 
 	let category = $page.params.category;
 
-	let searchQuery = '';
-
 	let inventory: (Inventory & { gallery: Gallery[] })[] = [];
-
-	let filterType = 'All';
-
 	let filters: Filter[] = [];
 
-	async function fetchData() {
+	onMount(async () => {
 		filters = await getFilter(category);
-
 		const basicInfo = await getData(category);
-		const newInventory: any = [];
+		inventory = await Promise.all(
+			basicInfo.map(async (item) => {
+				const gallery = await getGallery(item.id);
+				return { ...item, gallery };
+			})
+		);
+	});
 
-		for (const item of basicInfo) {
-			const gallery = await getGallery(item.id);
-			newInventory.push({ ...item, gallery });
-		}
-
-		inventory = newInventory;
-	}
-
-	function handleOnClick(item: Inventory) {
+	function handleItemClick(event) {
+		const item = event.detail;
 		goto(`/${item.category}/detail/${item.id}`);
 	}
 
-	$: filterValue = filters.find((e) => e.label === filterType)?.value;
-
-	$: filteredInventory = inventory
-		.filter(
-			//@ts-expect-error
-			(e) => filterType === 'All' || e.type.includes(filterValue)
-		)
-		.filter(
-			(e) =>
-				e.item.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				e.itemDescription.toLowerCase().includes(searchQuery.toLowerCase())
-		);
-
-	$: fetchData();
+	function handleBackClick() {
+		goto('/');
+	}
 </script>
 
-<div class="flex flex-col gap-4 pb-[128px]">
-	<div
-		class="sticky top-0 z-[1000] bg-white flex flex-col gap-4 pt-4 pb-4"
-		style="box-shadow: rgb(0 0 0/16%) 0 0 6px"
-	>
-		<div class="flex items-center pr-4">
-			<button class="-rotate-180 px-4" on:click={() => goto('/')}>
-				<ArrowRight />
-			</button>
-			<Search bind:value={searchQuery} />
-		</div>
-
-		<Chips
-			bind:selectedValue={filterType}
-			options={filters.map((e) => e.label)}
-			defaultValue="All"
-		/>
-	</div>
-
-	<div class="px-4 overflow-auto flex flex-col gap-6 pb-4">
-		{#each filteredInventory as item}
-			<InventoryItem
-				subheading={item.itemDescription}
-				heading={item.item}
-				features={Object.entries(item.others)
-					.splice(0, 3)
-					.map((e) => {
-						const [key, value] = e;
-
-						return { label: key, value };
-					})}
-				medias={item.gallery}
-				on:click={() => handleOnClick(item)}
-			/>
-		{/each}
-	</div>
-</div>
+<InventoryList
+	{inventory}
+	{filters}
+	on:itemClick={handleItemClick}
+	on:backClick={handleBackClick}
+/>

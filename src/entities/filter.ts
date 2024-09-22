@@ -12,6 +12,10 @@ export const networkingFilter = [
 	{
 		label: 'CAT-6',
 		value: 'cat-6'
+	},
+	{
+		label: 'CAT-6A',
+		value: 'cat-6a'
 	}
 ];
 
